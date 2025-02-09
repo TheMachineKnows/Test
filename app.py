@@ -20,7 +20,7 @@ def close_connection(exception):
 
 @app.route('/')
 def index():
-    return "Hello, World!"
+    return "Hello, World again!"
 
 if __name__ == '__main__':
     app.run(debug=True)
