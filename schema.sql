@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS entries;
 CREATE TABLE entries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    text TEXT NOT NULL
+    name TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    expiration_date DATE
 );
