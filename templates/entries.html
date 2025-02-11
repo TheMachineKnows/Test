@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="device-width", initial-scale="1.0">
+    <title>List of items</title>
+</head>
+<body>
+    <h1>List of items</h1>
+    <table id="item-list">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>expiration Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in entries %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{% if item.expiration_date %} {{ item.expiration_date }} {% endif %}</td>
+                    <td>
+                        <form action="/update-quantity" method="post" style="display: inline;">
+                            <input type="hidden" name="item_id" value="{{item.id}}">
+                            <input type="number" name="quantity" value="0" min="0">
+                            <input type="submit" value="Update">
+                            <input type="submit" value="Delete">
+                        </form></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="4">No items in inventory</td></tr>
+            {% endfor %}        
+        </tbody>
+    </table>
+
+
+ <!--  <ul id="item-list">
+        {% for item in entries %}
+            <li>{{ item.name }} - Quantity: {{ item.quantity }} 
+                {% if item.expiration_date %} - 
+                Expires: {{ item.expiration_date }} 
+                {% endif %}</li>
+            {% else %}
+            <li>No items in inventory.</li>
+        {% endfor %}
+        </ul>
+--> 
+        <br>
+        <a href="/">Go back</a>
+</body>
+
+</html>
