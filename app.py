@@ -140,4 +140,8 @@ def delete_item():
 if __name__ == '__main__':
     # Run the Flask app in debug mode. The host parameter makes the host
     # visible to all devices on the local network.
-    app.run(debug=True, host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
+
+@app.before_request
+def log_request_info():
+    print(f"Request from: {request.remote_addr} for {request.url}")
