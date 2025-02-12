@@ -140,4 +140,6 @@ def delete_item():
 if __name__ == '__main__':
     # Run the Flask app in debug mode. The host parameter makes the host
     # visible to all devices on the local network.
-    app.run(host='0.0.0.0', debug=False)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
