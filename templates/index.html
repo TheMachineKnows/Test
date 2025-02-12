@@ -8,6 +8,12 @@
 </head>
 <body>
     <h1>Food Inventory</h1>
+    <h2>Search item</h2>
+    <form action="/search" method="post">
+        <label for="barcode">Barcode:</label>
+        <input type="text" id="barcode" name="barcode" required>
+        <button type="submit">Search</button>
+    </form>
     <h2>Add Item</h2>
     <form  action="/add" method="post">
         <label for="name">Name:</label>

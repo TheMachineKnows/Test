@@ -1,11 +1,16 @@
 from flask import Flask, g, request, render_template, jsonify, redirect
 import sqlite3
+import requests
 from datetime import datetime
 
 DATABASE = 'database.db'
 
 # Initialize Flask application
 app = Flask(__name__)
+
+app.secret_key = "verysecret1981"
+
+#barcode = 3017624010701
 
 # Function to get the database connection
 def get_db():
@@ -15,6 +20,35 @@ def get_db():
          # Set row_factory to make rows behave like dicts
         db.row_factory = sqlite3.Row
     return db
+# This function is used for connecting to openfoodfactsAPI
+def get_food_fact(barcode):
+    url = f"https://world.openfoodfacts.net/api/v2/product/{barcode}.json"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # This will raise an exception for bad status codes
+        data = response.json()
+        if data.get('status')== 1: #If a product was found
+            product = data['product']
+            return {
+                'name': product.get('product_name')
+                }
+        else:
+            return {"error": "Product not found"}
+    except requests.RequestException as e:
+        return {"error": str(e)}
+
+#Function to handle search form
+@app.route('/search', methods=['POST']) 
+def search_by_barcode():
+    barcode = request.form.get('barcode')
+    if not barcode:
+        return "Please provide a barcode.", 400
+
+    product_info = get_food_fact(barcode)
+    if 'error' in product_info:
+        return render_template('search_result.html', error=product_info['error'])
+    else:
+        return render_template('search_result.html', product=product_info)
 
 # Function to clean up database connection
 @app.teardown_appcontext
@@ -104,5 +138,6 @@ def delete_item():
 
 
 if __name__ == '__main__':
-    # Run the Flask app in debug mode
-    app.run(debug=True)
+    # Run the Flask app in debug mode. The host parameter makes the host
+    # visible to all devices on the local network.
+    app.run(debug=True, host='0.0.0.0')
